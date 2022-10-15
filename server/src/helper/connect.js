@@ -16,7 +16,6 @@ function constructURI () {
 function connectDB () {
   return new Promise ((resolve, reject) => {
     const uri = constructURI ();
-    console.log (uri);
     const client = new MongoClient (uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -36,4 +35,4 @@ function connectDB () {
   });
 }
 
-module.exports = {connectDB: connectDB, db: db};
+module.exports = {connectDB: connectDB, db:db};

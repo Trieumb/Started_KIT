@@ -1,5 +1,7 @@
 import React, {Component, useState} from 'react';
 import axios from 'axios';
+// import * as Google from 'expo-auth-session/providers/google';
+// import * as WebBrowser from 'expo-web-browser';
 
 import {
   Image,
@@ -30,6 +32,24 @@ export default (Login = ({navigation}) => {
 
   const [emailLogin, setEmailLogin] =  useState ('');
   const [passwordLogin, setPasswordLogin] =  useState ('');
+
+  // const [accessToken, setAccessToken] = useState();
+  // const [userInfo, setUserInfo] = useState();
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //     androidClientId: "1091965022060-t5jfpjgodlic9dbsli0selevujt0ffq5.apps.googleusercontent.com"
+  // });
+
+  // React.useEffect( () => {
+  //     if(response?.type === "success"){
+  //       setAccessToken(response.authentication.accessToken);
+  //     }
+  // }),[response]
+
+  // async function getUserData(){
+  //   let userInfoResponse = await fetch ("http://192.168.1.8:5000/userinfo",{
+  //       headers: { Authorization: `Bearer ${accessToken}`}
+  //   })
+  // }
   // event sign-up
   const signUpHandle = async event => {
     if (password !== confirmPassword) {
@@ -83,6 +103,19 @@ export default (Login = ({navigation}) => {
       setIsLoading (false);
     }
   };
+
+  // login google
+
+  const loginGoogleHandle =  async (event) => {
+    // window.open('http://localhost:5000/auth/google', '_self');
+    try {
+      const response = await axios.get('http://192.168.1.8:5000/auth/google');
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }   
+  }
+
   return (
     <View style={styles.container}>
       <View style={{width: '100%', height: '25%'}}>
@@ -122,7 +155,7 @@ export default (Login = ({navigation}) => {
           : null}
       </View>
       <View style={{flex: 1, backgroundColor: '#F5F5F5'}}>
-        <SocialLoginComponent />
+        <SocialLoginComponent  loginGoogleHandle={loginGoogleHandle}/>
       </View>
     </View>
   );
@@ -371,7 +404,7 @@ const BanerComponent = ({page, setPage}) => {
 };
 
 // social login view
-const SocialLoginComponent = () => {
+const SocialLoginComponent = ({loginGoogleHandle}) => {
   return (
     <View style={{width: '100%', height: '100%'}}>
       <View style={styles.seperate}>
@@ -379,7 +412,7 @@ const SocialLoginComponent = () => {
         <Text style={{padding: 10}}>Hoặc đăng nhập với</Text>
         <View style={{width: '30%', height: 1, backgroundColor: '#707070'}} />
       </View>
-      <TouchableOpacity style={styles.button_Socail}>
+      <TouchableOpacity style={styles.button_Socail} onPress={loginGoogleHandle}>
         <Image
           style={styles.icon_Input}
           source={require ('../images/gg.png')}
