@@ -9,9 +9,10 @@
 import React from 'react';
 import type { Node } from 'react';
 import { PersistGate } from 'redux-persist/integration/react'
-import RootComponent from './src/screens/Index';
+import RootComponent from './src/navigation/Index';
 import { Provider } from 'react-redux';
-import {store, persistor } from './src/redux/store';
+import { store, persistor } from './src/redux/store';
+
 
 const App: () => Node = () => {
   return (

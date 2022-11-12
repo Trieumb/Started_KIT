@@ -13,7 +13,7 @@ const userController = {
 
     deleteUser: asyncHandler(async(req, res) => {
         try {
-            const user = await User.findByIdAndDelete(req.params.id);
+            await User.findByIdAndDelete(req.params.id);
             res.status(200).json('Delete sucessfully!');
         } catch (error) {
             res.status(500).json(error);

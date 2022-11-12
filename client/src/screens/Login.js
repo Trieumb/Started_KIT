@@ -40,7 +40,7 @@ export default (Login = ({ navigation }) => {
     try {
       const response = await axios.get('http://192.168.1.9:5000/auth/google');
       if (response.status === 200) {
-        navigation.navigate('Home');
+        navigation.navigate('HomePage');
       }
     } catch (error) {
       alert(error)

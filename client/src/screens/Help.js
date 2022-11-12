@@ -10,7 +10,7 @@ export default Help = () => {
             <View style={styles.header}>
             <Pressable style={styles.home_buttonBack} onPress={() => navigation.navigate('Home')}>
                 <Ionicons name="chevron-back" size={20} style={styles.icon}/>
-                <Text style={{marginLeft:5}}>Back</Text>
+                <Text style={{marginLeft:5, color:"#339966"}}>Back</Text>
             </Pressable>
             </View>
             <View style={{ alignItems: 'center',justifyContent:'center', flex: 1 }}>
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
         marginLeft:5,
         width: 25,
         height: 25,
+        color: '#339966',
     },
     home_buttonBack: {
         flexDirection: 'row',

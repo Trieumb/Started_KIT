@@ -50,7 +50,7 @@ const authSlice = createSlice({
         logoutFailed: (state) => {
             state.login.isLoading = false;
             state.login.err = true;
-        }
+        },
     }
 });
 

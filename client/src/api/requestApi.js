@@ -1,9 +1,10 @@
+import { axiosInstance } from './axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   loginFailed, loginStart, loginSuccess,
   registerStart, registerFailed, registerSuccess,
   logoutStart, logoutSussess, logoutFailed
 } from '../redux/reducers/AuthSlice';
-import { axiosInstance } from './axios';
 import {
   getUserStart, getUserSuccess, getUserFailed,
   deleteUserFailed, deleteUserStart, deleteUserSuccess,
@@ -17,6 +18,7 @@ export const loginUser = (user) => {
     try {
       const res = await axiosInstance.post(URL + '/auth/login', user);
       dispatch(loginSuccess(res.data));
+      await AsyncStorage.setItem('AccessToken', res.data.accessToken);
     } catch (error) {
       console.log(error)
       dispatch(loginFailed());
@@ -36,19 +38,18 @@ export const registerUser = (user) => {
   }
 
 }
-export const logoutUser = async (accessToken, dispatch) => {
-    dispatch(logoutStart());
-    try {
-        await axiosInstance.get(URL + '/user', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      dispatch(logoutSussess());
-    } catch (error) {
-      console.log(error);
-      dispatch(logoutFailed());
-    }
+export const logoutUser = async (accessToken, dispatch, id) => {
+  dispatch(logoutStart());
+  try {
+    await axiosInstance.post(URL + '/auth/logout', id,{
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    dispatch(logoutSussess());
+  } catch (error) {
+    console.log(error);
+    dispatch(logoutFailed());
   }
-
+}
 
 export const getAllUser = async (accessToken, dispatch) => {
   dispatch(getUserStart());
@@ -65,7 +66,7 @@ export const getAllUser = async (accessToken, dispatch) => {
 export const deleteUser = async (accessToken, dispatch, id) => {
   dispatch(deleteUserStart());
   try {
-    const res = await axiosInstance.delete(URL + '/user/' + id, {
+    const res = await axiosInstance.delete(URL + `/user/:${id}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     dispatch(deleteUserSuccess(res.data));

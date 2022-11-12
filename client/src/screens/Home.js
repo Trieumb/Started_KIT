@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector, useDispatch} from 'react-redux';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { logoutUser } from "../api/requestApi";
 import {
     View,
     Text,
@@ -10,15 +11,18 @@ import {
     Pressable,
 } from 'react-native';
 
-export default Home = () => {
 
-    const handleLogout = async () => {
-        await AsyncStorage.removeItem('AccessToken');
-    };
-    useEffect(() => {
-        handleLogout();
-    },[]);
+export default Home = ({navigation}) => {
+
+    const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.login?.currentUser);
+    const accessToken = user?.accessToken;
+    const id = user?.others._id;
+    console.log(id);
+    const handleLogout = async () => {
+        await AsyncStorage.clear();
+        navigation.navigate('Login');
+    }
     return (
         <View style={{ width: '100%', height: '100%', }}>
             <HeaderComponent user={user} handleLogout={handleLogout} />
@@ -29,24 +33,30 @@ export default Home = () => {
     );
 };
 
-const HeaderComponent = ( {user, handleLogout} ) => {
+const HeaderComponent = ({ user, handleLogout }) => {
     return (
         <View style={styles.header}>
-            <Text>Hi! {user?.others.userName}</Text>
-            <Pressable style={styles.home_buttonSearch} onPress={() => {handleLogout()}}>
-                <Text>Logout</Text>
+            <Text style={styles.text}>Hi! {user?.others.userName}</Text>
+            <Pressable onPress={handleLogout} style={styles.buttonLogout}>
+                <Text style={styles.text}>LogOut</Text>
             </Pressable>
         </View>
     );
 };
 const styles = StyleSheet.create({
     header: {
-        height: '7%',
+        height: '10%',
         padding: 15,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         backgroundColor: '#F5F5F5',
+    },
+    buttonLogout:{
+        marginLeft:10,
+        backgroundColor:'#339966',
+        borderRadius:5,
+        padding:3,
     },
     icon: {
         width: 25,
@@ -73,5 +83,9 @@ const styles = StyleSheet.create({
         height: 25,
         color: 'white',
     },
+    text: {
+        fontSize: 16,
+        color:'black'
+    }
 });
 

@@ -17,9 +17,18 @@ const authentication = {
             res.status(401).json('You are not authenticated!');
         }
     },
+    verifyTokenAndUserAuthorization: (req, res, next) => {
+        verifyToken(req, res, () => {
+          if (req.user.id === req.params.id|| req.user.admin) {
+            next();
+          } else {
+            res.status(403).json("You're not allowed to do that!");
+          }
+        });
+      },
     verifytokenAdmin: (req, res, next) => {
         authentication.verifyToken(req, res, () => {
-            if(req.user.id == req.params.id || req.user.admin){
+            if(req.user.admin){
                 next();
             }else {
                 res.status(403).json('You are not allowed to delete!')

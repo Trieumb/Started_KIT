@@ -7,7 +7,7 @@ export default Setting = ({ navigation }) => {
 
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.login?.currentUser);
-    const userList = useSelector((state) => state.users.users?.allUsers);
+    const userList = useSelector((state) => state.users.users?.allUsers); 
     useEffect(() => {
         if (!user) {
             navigation.navigate('Login');
@@ -16,27 +16,15 @@ export default Setting = ({ navigation }) => {
             getAllUser(user?.accessToken, dispatch);
         }
     }, []);
-    console.log(user?.accessToken)
-    const handleLogout = async () => {
-        logoutUser(user?.accessToken, dispatch);
-        console.log('Logout')
-    };
     const handleDeleteUser = (id) => {
-        deleteUser(user?.accessToken, dispatch, id);
+        deleteUser(accessToken, dispatch, id);
     }
     return (
         <View style={{ flex: 1 }}>
             {
                 (user?.others.admin === false) ? (
-                    <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20, flex:1 }}>
                         <Text>Setting Screen</Text>
-                        <Pressable style={{
-                            borderWidth: 1, height: 30, borderRadius: 5, padding: 5,
-                            alignItems: 'center', marginTop: 10
-                        }}
-                            onPress={handleLogout}>
-                            <Text >Log out</Text>
-                        </Pressable>
                     </View>
                 ) : (
                     <ScrollView>
@@ -47,7 +35,7 @@ export default Setting = ({ navigation }) => {
                                     return (
                                         <View key={user.email} style={{ padding: 10 }}>
                                             <Text>{user.email}</Text>
-                                            <Pressable style={{ borderWidth: 1, marginTop: 5, }} onPress={handleDeleteUser} >
+                                            <Pressable style={{ borderWidth: 1, marginTop: 5, }} onPress={handleDeleteUser(id)} >
                                                 <Text style={{ color: 'red' }}>Delete</Text>
                                             </Pressable>
                                         </View>

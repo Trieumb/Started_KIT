@@ -49,12 +49,6 @@ const authController = {
         { algorithm: 'RS256',
           expiresIn: '30d'}
         )
-        res.cookie ('token', accessToken, {
-          httpOnly: true,
-          secure: false,
-          path: '/',
-          sameSite: 'strict',
-        });
         const {password, ...others} = user._doc; 
         res.status(200).json({others,accessToken});
       }
@@ -63,8 +57,12 @@ const authController = {
     } 
   }),
   logoutUser: asyncHandler(async(req, res) => {
-    res.clearCookie('accessToken');
-    res.status(200).json('Logged out!');
+    try {
+      res.status(200).json('Logged out!');
+    } catch (error) {
+      console.log(error);
+    }
+    
   })
 }
 module.exports = authController;

@@ -8,6 +8,7 @@ const userSlice = createSlice({
             isLoading: false,
             err: false
         },
+        msg:"",
     },
     reducers: {
         getUserStart: (state) => {
@@ -26,11 +27,12 @@ const userSlice = createSlice({
         },
         deleteUserSuccess: (state, action) => {
             state.users.isLoading = false;
-            state.users.allUsers = action.payload;
+            state.msg= action.payload;
         },
-        deleteUserFailed: (state) => {
+        deleteUserFailed: (state, action) => {
             state.users.isLoading = false;
-            state.users.err = true;
+            state.users.err= true;
+            state.msg= action.payload;
         },
     }
 })
