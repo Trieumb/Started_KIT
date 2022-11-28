@@ -3,7 +3,7 @@ const oauthRouter = express.Router ();
 const passport = require ('passport');
 require ('../helper/passport.js');
 
-const CLIENT_URL = 'http://localhost:5000';
+const CLIENT_URL = 'http://192.168.1.8:5000';
 
 oauthRouter.get ('/login/failed', (req, res) => {
   res.status (401).json ({

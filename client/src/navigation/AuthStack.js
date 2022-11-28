@@ -1,13 +1,13 @@
 import React from 'react';
-import Register from '../screens/Register';
-import Login from '../screens/Login';
+import Register from '../screens/register';
+import Signin from '../screens/login';
 
 export default AuthStack = (Stack) => {
     return (
         <>
             <Stack.Screen
                 name="Login"
-                component={Login}
+                component={Signin}
             />
             <Stack.Screen
                 name="Register"

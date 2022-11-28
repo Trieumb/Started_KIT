@@ -1,61 +1,70 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios";
+import { API_URL } from "../../config/api/Axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const authSlice = createSlice({
-    name: 'auth',
-    initialState: {
-        login: {
-            currentUser: null,
-            isLoading: false,
-            err: false,
-        },
-        register: {
-            isLoading: false,
-            err: false,
-            success: false
-        },
+  name: 'auth',
+  initialState: {
+    login: {
+      status: 'idle',
+      currentUser: {},
+      isLogin: false,
+      error: '',
     },
-    reducers: {
-        loginStart: (state) => {
-            state.login.isLoading = true;
-        },
-        loginSuccess: (state, action) => {
-            state.login.isLoading = false;
-            state.login.currentUser = action.payload;
-            state.login.err = false;
-        },
-        loginFailed: (state) => {
-            state.login.isLoading = false;
-            state.login.err = true;
-        },
-        registerStart: (state) => {
-            state.register.isLoading = true;
-        },
-        registerSuccess: (state) => {
-            state.register.isLoading = false;
-            state.register.err = false;
-            state.register.success = true;
-        },
-        registerFailed: (state) => {
-            state.register.isLoading = false;
-            state.register.err = true;
-        },
-        logoutStart: (state) => {
-            state.login.isLoading = true;
-        },
-        logoutSuccess: (state) => {
-            state.login.isLoading = false;
-            state.login.err = false;
-            state.login.currentUser= null;
-        },
-        logoutFailed: (state) => {
-            state.login.isLoading = false;
-            state.login.err = true;
-        },
-    }
+    register: {
+      status: 'idle',
+      error: '',
+    },
+  },
+  reducers: {
+
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(loginUser.pending, (state, action) => {
+        state.login.status = 'loading';
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.login.status = 'succeeded'
+        state.login.currentUser = action.payload;
+        state.login.isLogin = true;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.login.status = 'failed';
+        state.login.error = action.error.message;
+      })
+      .addCase(registerUser.pending, (state, action) => {
+        state.register.status = 'loading';
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.register.status = 'succeeded';
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.register.status = 'failed';
+        state.register.error = action.error.message;
+      })
+  }
 });
 
-export const { loginStart, loginSuccess,loginFailed, 
-    registerStart,registerFailed, registerSuccess,
-    logoutStart,logoutSussess,logoutFailed } = authSlice.actions;
+export const loginUser = createAsyncThunk('auth/login', async (user) => {
+  try {
+    const res = await axios.post(API_URL + '/auth/login', user);
+    await AsyncStorage.setItem('AccessToken', res.data.accessToken);
+    await AsyncStorage.setItem('User', JSON.stringify(res.data.others));
+    return res.data;
+  } catch (error) {
+    alert("Email hoặc mật khẩu sai!")
+  }
+});
+export const registerUser = createAsyncThunk('auth/register', async (user) => {
+  try {
+    const res = await axios.post(API_URL + '/auth/register', user);
+    return res.data;
+  } catch (error) {
+    alert("Tài khoản đã tồn tại!");
+  }
+})
+
 export default authSlice.reducer;
 

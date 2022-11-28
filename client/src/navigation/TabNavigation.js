@@ -1,10 +1,13 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from '../screens/Home';
-import Setting from '../screens/Setting';
-import Help from '../screens/Help';
-import About from '../screens/About';
+import Home from '../screens/home/Home';
+import Setting from '../screens/setting/Setting';
+import Help from '../screens/help/Help';
+import About from '../screens/about/About';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Colors from '../config/constants/Colors';
+import Users from '../screens/managerScreen/users/Users';
+import UserManagerStack from './UserManagerStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,8 +30,8 @@ const TabNavigation = () => {
                     }
                     return <Ionicons name={iconName} size={size} color={color} />;   
                 },
-                tabBarActiveTintColor: '#339966',
-                tabBarInactiveTintColor: 'gray',
+                tabBarActiveTintColor: Colors.primary,
+                tabBarInactiveTintColor: Colors.darkGray,
                 headerShown: false,
                 tabBarLabelStyle:{
                     fontSize:16,
@@ -36,7 +39,7 @@ const TabNavigation = () => {
             })}
         >
             <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Settings" component={Setting} />
+            <Tab.Screen name="Settings" component={UserManagerStack} />
             <Tab.Screen name="Help" component={Help} />
             <Tab.Screen name="About" component={About} />
         </Tab.Navigator>
